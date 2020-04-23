@@ -1,0 +1,19 @@
+{
+    "sites": [{
+            "site_name": "Reuters",
+            "url": "https://www.reuters.com/"
+        },
+        {
+            "site_name": "Google",
+            "url": "https://www.google.com/"
+        },
+        {
+            "site_name": "Leet-code",
+            "url": "https://leetcode.com/"
+        },
+        {
+            "site_name": "Node",
+            "url": "https://www.nodejs.org/"
+        }
+    ]
+}

@@ -1,0 +1,123 @@
+* {
+    -webkit-transition: 0s !important;
+    transition: 0s !important
+}
+
+*,
+:after,
+:before {
+    box-sizing: border-box
+}
+
+body {
+    color: white;
+    background-color: #000;
+}
+
+.header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 6rem 6rem 10rem 6rem;
+}
+
+.header form {
+    margin: 1rem;
+    text-align: center;
+}
+.header input{
+    min-width: 100px;
+    width: fit-content;
+    border-radius: 0;
+    height: 30px;
+    margin: 0.5rem;
+}
+.header button {
+    margin: 0.5rem;
+    padding: 5px;
+    background: white;
+    box-shadow: -1rem 1rem 1rem rgba(0,0,0,0.3);
+}
+
+.header button:hover,
+.header button:focus {
+    background: lightgrey;
+}
+
+.header button:focus {
+    outline: 1px solid #fff;
+    outline-offset: -4px;
+}
+
+.header button:active {
+    transform: scale(0.99);
+}
+
+.card {
+    width: 500px;
+    height: fit-content;
+    background: #17141d;
+    box-shadow: -1rem 0 3rem rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    transition: .2s;
+    clear: both;
+    margin: 10px;
+    position: relative;
+}
+
+
+.card:hover {
+    transform: scale(1.2);
+    box-shadow: -2rem -2rem 5rem rgba(0, 0, 0, 0.8);
+}
+.card:hover~.card{
+    z-index: -1;
+}
+
+.card h2, .card button {
+    padding: 10px;
+}
+
+img {
+    width: 500px;
+    height: auto;
+}
+
+a {
+    color: lightgrey;
+}
+
+.diagonal-box {
+    background-image: linear-gradient(45deg, #6303B1, #ff0099);
+    transform: skewY(-11deg);
+}
+
+.end-note h1 {
+    margin: 10rem 0 0 0;
+    text-align: center;
+}
+
+.end-note h2 {
+    margin: 0;
+    text-align: center;
+}
+
+.delete i {
+    font-size: 24px !important;
+    color: lightgrey;
+}
+
+.delete {
+    background: none !important;
+    border: 0;
+}
+
+.delete i:hover {
+    cursor: pointer;
+    color: white;
+    font-size: 30px !important;
+}
