@@ -15,5 +15,27 @@
             "site_name": "Node",
             "url": "https://www.nodejs.org/"
         }
+    ],
+
+    "sitesCat": [{
+            "site_name": "Reuters",
+            "url": "https://www.reuters.com/",
+            "cat": "general"
+        },
+        {
+            "site_name": "Google",
+            "url": "https://www.google.com/",
+            "cat": "general"
+        },
+        {
+            "site_name": "Leet-code",
+            "url": "https://leetcode.com/",
+            "cat": "general"
+        },
+        {
+            "site_name": "Node",
+            "url": "https://www.nodejs.org/",
+            "cat": "general"
+        }
     ]
 }

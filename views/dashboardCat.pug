@@ -1,0 +1,27 @@
+doctype html
+head
+  meta(charset='utf-8')
+  title Wesite Dashboard
+  link(rel='stylesheet' href='stylesheets/styleCat.css')
+  link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
+.header
+  h1 Your Personal Dashboard
+  form#addCat
+    input#category(placeholder='Category:' name='category')
+    br
+    button#addButton(type='submit') Add Category
+.diagonal-box
+  .container(name='general')
+    .control-area
+        h3.category-label General
+        button.show-site(value='Add') Add
+        form.add-site-area(name='general')
+            input.site(placeholder='Site:')
+            input.url(placeholder='URL:')
+            br
+            button.add-site(type='submit') Submit
+    .scrolling-wrapper.img-area(name='general')
+.end-note
+  h1  Designed By:
+  h2  Khanti Rindani
+script(src='javascripts/clientScriptCat.js')

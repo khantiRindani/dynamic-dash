@@ -9,7 +9,7 @@ async function captureImage(site){
         return;
     try{
         console.log(`capturing image: ${site.url}`);
-        await takePicture(site);
+        await takePicture([site]);
         dashCash.set(site.site_name,site);
     }catch(e){
         console.log('Error in puppet',e);
@@ -28,7 +28,7 @@ dashCash.on("expired", function(key, value) {
         console.log(e);
     }
 });
-const readSites = require("../utils/siteList");
+const {readSites} = require("../utils/siteList");
 readSites().forEach((site,index,array)=>{
     captureImage(site);
 });
