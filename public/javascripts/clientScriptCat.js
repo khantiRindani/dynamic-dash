@@ -108,7 +108,7 @@ function deleteAction() {
             console.log('called');
             let element = event.target;
             let site = element.parentNode.parentNode.querySelector('h2').innerHTML;
-            const response = await fetch("http://localhost:3000/deleteSiteCat", {
+            const response = await fetch("/deleteSiteCat", {
                 method: 'DELETE',
                 headers: {
                     'Content-type': 'application/json'
@@ -127,7 +127,7 @@ function deleteAction() {
     });
 }
 async function getImages() {
-    const response = await fetch("http://localhost:3000/getImagesCat");
+    const response = await fetch("/getImagesCat");
     sites = await response.json();
 
     await loadImages(sites);
@@ -156,7 +156,7 @@ async function addSite(event){
     let root = event.target;
     let siteElement = root.querySelector('.site');
     let urlElement = root.querySelector('.url');
-    const response = await fetch("http://localhost:3000/addSiteCat", {
+    const response = await fetch("/addSiteCat", {
         method: 'POST',
         headers: {
             'Content-type': 'application/json'
