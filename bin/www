@@ -5,7 +5,7 @@
  */
 
 var app = require('../app');
-//var debug = require('debug')('express-dashboard:server');
+var debug = require('debug')('express-dashboard:server');
 var http = require('http');
 
 
@@ -27,8 +27,8 @@ var server = http.createServer(app);
  */
 
 server.listen(port);
-//server.on('error', onError);
-//server.on('listening', onListening);
+server.on('error', onError);
+server.on('listening', onListening);
 
 /**
  * Normalize a port into a number, string, or false.
@@ -54,7 +54,7 @@ function normalizePort(val) {
  * Event listener for HTTP server "error" event.
  */
 
-/*function onError(error) {
+function onError(error) {
   if (error.syscall !== 'listen') {
     throw error;
   }
@@ -76,7 +76,7 @@ function normalizePort(val) {
     default:
       throw error;
   }
-}*/
+}
 
 /**
  * Event listener for HTTP server "listening" event.

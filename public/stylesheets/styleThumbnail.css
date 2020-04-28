@@ -69,6 +69,12 @@ body {
     position: relative;
 }
 
+.scrolling_wrapper{
+    display: flex;
+    flex-wrap: wrap;
+    padding: 3rem;
+    transform: skewY(11deg);
+}
 
 .card:hover {
     transform: scale(1.2);

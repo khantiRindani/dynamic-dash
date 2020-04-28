@@ -67,15 +67,16 @@ body {
     text-transform: uppercase;
     transform: rotate(270deg);
     height: 40px;
-    width: 200px;
+    width: 400px;
     text-align: center;
     position: relative;
-    left: 0;
-    top: 15rem;
-    line-height: 2rem;
+    left: 80px;
+    bottom: -150px;
+    margin-left: -150px;
     border-bottom: 5px solid orange;
 }
 .show-site{
+    height: 400px;
     background: #17141d;
     color: white;
     border: none;
@@ -107,7 +108,7 @@ body {
 
 .card {
     width: 500px;
-    height: fit-content;
+    height: 400px;
     background: #17141d;
     box-shadow: -1rem 0 3rem rgba(0, 0, 0, 0.8);
     display: flex;
@@ -214,7 +215,7 @@ a {
 
     .card {
         width: 250px;
-        height: fit-content;
+        height: auto;
         box-shadow: -1rem 0 3rem rgba(0, 0, 0, 0.8);
     }
 

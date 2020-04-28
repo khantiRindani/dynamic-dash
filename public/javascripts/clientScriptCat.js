@@ -1,3 +1,4 @@
+//Load individual card for a site
 function loadCard({site_name,url,cat}) {
     let containers = document.querySelectorAll('.img-area');
 
@@ -9,10 +10,9 @@ function loadCard({site_name,url,cat}) {
         }
     }
     if(flag===false){
-        console.log('why');
         loadCategory(cat);
         let control = document.querySelectorAll('.show-site');
-        control[control.length-1].addEventListener('click', showSite);
+        control[control.length-1].addEventListener('click', showAddSiteArea);
         control = document.querySelectorAll('.add-site-area');
         control[control.length-1].addEventListener('submit',async function(event) {
             event.preventDefault();
@@ -49,9 +49,29 @@ function loadCard({site_name,url,cat}) {
     div.appendChild(button);
 
     root.appendChild(div);
-    deleteAction();
 }
 
+//Get Site-Images through API.
+async function getImages() {
+    const response = await fetch("/getImagesCat");
+    sites = await response.json();
+
+    await loadImages(sites);
+}
+
+//Load the images.
+function loadImages(sitesArray) {
+    if (sitesArray.length == 0) exit();
+    for(site of sitesArray){
+        loadCard(site);
+    }
+    let deleteBtns = document.querySelectorAll(".delete");
+    for(btn of deleteBtns){
+        btn.addEventListener('click', deleteSite);
+    }
+}
+
+//New container for new category
 function loadCategory(category){
     let bar = document.querySelector('.diagonal-box');
 
@@ -101,47 +121,8 @@ function loadCategory(category){
     bar.appendChild(container);
 }
 
-function deleteAction() {
-    let deleteBtns = document.querySelectorAll(".delete");
-    deleteBtns.forEach((btn, index, array) => {
-        btn.addEventListener('click', async function(event) {
-            console.log('called');
-            let element = event.target;
-            let site = element.parentNode.parentNode.querySelector('h2').innerHTML;
-            const response = await fetch("/deleteSiteCat", {
-                method: 'DELETE',
-                headers: {
-                    'Content-type': 'application/json'
-                },
-                body: JSON.stringify({
-                    site: site
-                })
-            });
-            await response.json();
-
-            while (!element.classList.contains("card"))
-                element = element.parentNode;
-            element.parentNode.removeChild(element);
-
-        });
-    });
-}
-async function getImages() {
-    const response = await fetch("/getImagesCat");
-    sites = await response.json();
-
-    await loadImages(sites);
-}
-
-function loadImages(sites) {
-    if (sites.length == 0) exit();
-    sites.forEach((site, index, array) => {
-        loadCard(site);
-    });
-    deleteAction();
-}
-
-function showSite(event) {
+//To toggle the form for adding site
+function showAddSiteArea(event) {
     let root = event.target.parentNode;
     let siteArea = root.querySelector('.add-site-area')
     if(siteArea.style.visibility == 'hidden'){
@@ -152,19 +133,19 @@ function showSite(event) {
         root.parentNode.querySelector('.img-area').style.marginLeft = '-12rem';
     }
 }
-async function addSite(event){
-    let root = event.target;
-    let siteElement = root.querySelector('.site');
-    let urlElement = root.querySelector('.url');
-    const response = await fetch("/addSiteCat", {
+
+//Add site through API.
+async function addSite(event) {
+    let siteElement = document.querySelector('#site')
+    let urlElement = document.querySelector('#url');
+    const response = await fetch("/addSite", {
         method: 'POST',
         headers: {
             'Content-type': 'application/json'
         },
         body: JSON.stringify({
             site: siteElement.value,
-            url: urlElement.value,
-            cat: root.name
+            url: urlElement.value
         })
     });
     siteElement.value = "";
@@ -173,6 +154,27 @@ async function addSite(event){
     console.log(site);
     loadImages([site]);
 }
+
+//Delete a site through API.
+async function deleteSite(event) {
+    let element = event.target;
+    let site = element.parentNode.parentNode.querySelector('h2').innerHTML;
+    const response = await fetch("/deleteSiteCat", {
+        method: 'DELETE',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({
+            site: site
+        })
+    });
+    await response.json();
+
+    while (!element.classList.contains("card"))
+        element = element.parentNode;
+    element.parentNode.removeChild(element);
+}
+
 window.addEventListener("load", function() {
 
     document.querySelector('#addCat').addEventListener('submit', function(event) {
@@ -180,7 +182,7 @@ window.addEventListener("load", function() {
         let catElement = document.querySelector('#category');
         loadCategory(catElement.value);
         let control = document.querySelectorAll('.show-site');
-        control[control.length-1].addEventListener('click', showSite);
+        control[control.length-1].addEventListener('click', showAddSiteArea);
         control = document.querySelectorAll('.add-site-area');
         control[control.length-1].addEventListener('submit',async function(event) {
             event.preventDefault();
@@ -189,7 +191,7 @@ window.addEventListener("load", function() {
         });
     });
 
-    document.querySelector('.show-site').addEventListener('click', showSite);
+    document.querySelector('.show-site').addEventListener('click', showAddSiteArea);
     document.querySelector('.add-site-area').addEventListener('submit', async function(event) {
         event.preventDefault();
 

@@ -6,7 +6,7 @@ head
   link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
 .header
   h1 Your Personal Dashboard
-  form#addSite
+  form#addSite(method="POST")
     input#site(placeholder='Site:' name='site')
     br
     input#url(placeholder='URL:' name='url')

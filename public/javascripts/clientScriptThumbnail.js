@@ -1,6 +1,7 @@
+//Load individual card for a site
 function loadCard({site_name,url}) {
     let containers = document.querySelectorAll('.img_field');
-    let root = containers[containers.length-1];
+    let root = containers[containers.length - 1];
 
     let div = document.createElement('div');
     div.classList.add("card");
@@ -29,83 +30,76 @@ function loadCard({site_name,url}) {
     root.appendChild(div);
 }
 
-function deleteAction() {
-    let deleteBtns = document.querySelectorAll(".delete");
-    deleteBtns.forEach((btn, index, array) => {
-        btn.addEventListener('click', async function(event) {
-            console.log('called');
-            let element = event.target;
-            let site = element.parentNode.parentNode.querySelector('h2').innerHTML;
-            await fetch("/deleteSite",{
-                method: 'DELETE',
-                headers: {
-                    'Content-type': 'application/json'
-                },
-                body: JSON.stringify({
-                    site: site
-                })
-            });
-            while (!element.classList.contains("card"))
-                element = element.parentNode;
-            element.parentNode.removeChild(element);
-            if(element.parentNode.childElementCount==0)
-                element.parentNode.parentNode.removeChild(element.parentNode);
-            changeLayout();
-        });
-    });
-}
+//Get Site-Images through API.
 async function getImages() {
     const response = await fetch("/getImages");
     sites = await response.json();
 
     await loadImages(sites);
 }
-function changeLayout(){
-    let wrapper = document.querySelector('.scrolling-wrapper');
-    if(wrapper.childElementCount<=5){
-        wrapper.style.display = 'flex';
-        wrapper.style.overflow = 'scroll';
-        wrapper.style.padding = '3rem';
-        wrapper.style.transform = 'skewY(11deg)';
-    }else{
-        wrapper.style.display = 'flex';
-        wrapper.style.flexWrap = 'wrap';
-        wrapper.style.padding = '3rem';
-        wrapper.style.transform= 'skewY(11deg)';
-    }
-}
-function loadImages(sites) {
-    if (sites.length == 0) exit();
-    sites.forEach((site, index, array) => {
-        loadCard(site);
-    });
-    deleteAction();
-    changeLayout();
-}
-window.addEventListener("load", function() {
-    async function send(event) {
-        let siteElement = document.querySelector('#site')
-        let urlElement = document.querySelector('#url');
-        const response = await fetch("/addSite", {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify({
-                site: site.value,
-                url: url.value
-            })
-        });
-        siteElement.value="";
-        urlElement.value="";
-        sites = await response.json();
-        console.log(sites);
-        loadImages(sites);
-    }
-    document.querySelector('#addSite').addEventListener('submit', function(event){
-        event.preventDefault();
 
-        send();
+//Load the images.
+function loadImages(sitesArray) {
+    if (sitesArray.length == 0) exit();
+    for(site of sitesArray){
+        loadCard(site);
+    }
+    let deleteBtns = document.querySelectorAll(".delete");
+    for(btn of deleteBtns){
+        btn.addEventListener('click', deleteSite);
+    }
+}
+
+//Add site through API.
+async function addSite(event) {
+    let siteElement = document.querySelector('#site')
+    let urlElement = document.querySelector('#url');
+    const response = await fetch("/addSite", {
+        method: 'POST',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({
+            site: siteElement.value,
+            url: urlElement.value
+        })
     });
+    siteElement.value = "";
+    urlElement.value = "";
+    site = await response.json();
+    console.log(site);
+    loadImages([site]);
+}
+
+//Delete a site through API.
+async function deleteSite(event) {
+    let element = event.target;
+    let site = element.parentNode.parentNode.querySelector('h2').innerHTML;
+    await fetch("/deleteSite",{
+        method: 'DELETE',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({
+            site: site
+        })
+    });
+    while (!element.classList.contains("card"))
+        element = element.parentNode;
+    element.parentNode.removeChild(element);
+    if(element.parentNode.childElementCount==0)
+        element.parentNode.parentNode.removeChild(element.parentNode);
+}
+
+window.addEventListener("load", function() {
+
+    document.querySelector('#addSite').addEventListener('submit', async function(event) {
+        event.preventDefault();
+        await addSite();
+    });
+    let deleteBtns = document.querySelectorAll(".delete");
+    for(btn of deleteBtns){
+        btn.addEventListener('click', deleteSite);
+    }
     getImages();
 });
