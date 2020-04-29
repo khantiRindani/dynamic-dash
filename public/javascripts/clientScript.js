@@ -38,7 +38,7 @@ function loadCard({site_name,url}) {
     button.appendChild(i);
     card.appendChild(button);
 
-    root.appendChild(div);
+    root.appendChild(card);
 }
 
 //Get Site-Images through API.
