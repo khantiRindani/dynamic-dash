@@ -18,22 +18,23 @@ body {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    margin: 6rem 6rem 10rem 6rem;
+    margin: 10vh 10vw 20vh 10vw;
 }
-
+.header h1{
+    flex: auto;
+}
 .header form {
-    margin: 1rem;
+    flex: auto;
     text-align: center;
 }
 .header input{
     min-width: 100px;
+    margin-bottom: 5px;
     width: fit-content;
     border-radius: 0;
     height: 30px;
-    margin: 0.5rem;
 }
 .header button {
-    margin: 0.5rem;
     padding: 5px;
     background: white;
     box-shadow: -1rem 1rem 1rem rgba(0,0,0,0.3);
@@ -76,6 +77,7 @@ body {
 .card:hover {
     transform: translateY(-1rem);
     box-shadow: -2rem -2rem 5rem rgba(0, 0, 0, 0.8);
+    scroll-behavior: smooth;
 }
 
 .card:hover~.card{
@@ -90,31 +92,9 @@ body {
 }
 
 .card h2, .card button {
-    padding: 10px;
+    padding: 1rem;
 }
 
-.label{
-    font-size: 2rem;
-    text-transform: uppercase;
-    transform: rotate(270deg);
-    height: 30px;
-    margin-top: 5rem;
-    line-height: 1rem;
-    border-bottom: 5px solid orange;
-    position: sticky;
-}
-.addSite{
-    background: #17141d;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    box-shadow: 1rem 1rem 2rem rgba(0,0,0,0.3);
-    margin-right: 5rem;
-    margin-left: -4rem;
-}
-.addSite:hover{
-    background: grey;
-}
 img {
     width: 500px;
     height: auto;
@@ -153,4 +133,27 @@ a {
     cursor: pointer;
     color: white;
     font-size: 30px !important;
+}
+
+@media (max-width:900px) {
+    .header{
+        text-align: center;
+    }
+}
+@media (max-width:700px) {
+    .card{
+        width: 90vw;
+    }
+    .card:not(:first-of-type){
+        margin-left: -30vw;
+    }
+
+    .card:hover~.card{
+        transform: translateX(30vw);
+        box-shadow: 1rem 0 3rem rgba(0, 0, 0, 0.8);
+    }
+    img {
+        width: 90vw;
+        height: auto;
+    }
 }

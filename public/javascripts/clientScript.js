@@ -11,12 +11,15 @@ function loadCard({site_name,url}) {
         root.parentNode.append(newRoot);
         root = newRoot;
     }
-    let div = document.createElement('div');
-    div.classList.add("card");
+    let card = document.createElement('div');
+    card.classList.add("card");
+    card.addEventListener('click',function(event){
+        event.target.parentNode.scrollLeft += event.target.offsetWidth/2;
+    });
 
     let a = document.createElement('a');
     a.href = `${url}`;
-    div.appendChild(a);
+    card.appendChild(a);
 
     let field = document.createElement('img');
     field.src = `images/${site_name}.png`;
@@ -25,7 +28,7 @@ function loadCard({site_name,url}) {
 
     let h2 = document.createElement('h2');
     h2.innerHTML = `${site_name}`;
-    div.appendChild(h2);
+    card.appendChild(h2);
 
     let i = document.createElement('i');
     i.classList.add("fa");
@@ -33,7 +36,7 @@ function loadCard({site_name,url}) {
     let button = document.createElement('button');
     button.classList.add("delete");
     button.appendChild(i);
-    div.appendChild(button);
+    card.appendChild(button);
 
     root.appendChild(div);
 }
@@ -110,15 +113,16 @@ async function deleteSite(event) {
     await loadImages(sites);
 }
 
-window.addEventListener("load", function() {
+window.addEventListener("load", async function() {
 
     document.querySelector('#addSite').addEventListener('submit', async function(event) {
         event.preventDefault();
         await addSite();
     });
+
     let deleteBtns = document.querySelectorAll(".delete");
     for(btn of deleteBtns){
         btn.addEventListener('click', deleteSite);
     }
-    getImages();
+    await getImages();
 });
