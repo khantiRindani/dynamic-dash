@@ -44,7 +44,7 @@ router.get('/getImagesCat', function(req, res, next) {
 });
 
 //API for adding a new site via form POST method
-router.post('/addSite*', async function(req,res){
+router.post('/addSite*', function(req,res){
     const sitesCat = req.cookies.sitesCat;
     const sites = req.cookies.sites;
     const newSiteCap = {
@@ -57,12 +57,12 @@ router.post('/addSite*', async function(req,res){
         "url": req.body.url,
         "cat": 'general'
     };
-    await controller.captureImage(newSiteCap);
+    controller.captureImage(newSiteCap);
     sitesCat.push(newSite);
     sites.push(newSiteCap);
     res.cookie('sitesCat', sitesCat, {expires: farFuture});
     res.cookie('sites',sites,{expires: farFuture});
-    res.json(newSite);
+    res.end("Done");
 });
 
 //API for deleting a site

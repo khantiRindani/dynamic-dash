@@ -6,13 +6,20 @@ const takePicture = require('../utils/backgroundPuppet');
 const fs = require('fs');
 const farFuture = new Date(new Date().getTime() + (1000*60*60*24*365*10)); // ~10y
 
+console.log(typeof(io));
+function pushData(site){
+    io.emit('Image Ready',{'site': site});
+}
 //Capture image only if not cached
 async function captureImage(site){
-    if(dashCash.has(site.site_name))
+    if(dashCash.has(site.site_name)){
+        pushData(site);
         return;
+    }
     try{
         console.log(`capturing image: ${site.url}`);
-        await takePicture([site]);
+        await takePicture([site])
+        pushData(site);
         dashCash.set(site.site_name,site);
     }catch(e){
         console.log('Error in puppet',e);

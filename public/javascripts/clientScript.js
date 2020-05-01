@@ -1,3 +1,4 @@
+let waiting = [];
 //Load individual card for a site
 function loadCard({site_name,url}) {
     let containers = document.querySelectorAll('.img_field');
@@ -75,11 +76,10 @@ async function addSite(event) {
             url: urlElement.value
         })
     });
+    await response;
+    waiting.push(siteElement.value);
     siteElement.value = "";
     urlElement.value = "";
-    site = await response.json();
-    console.log(site);
-    loadImages([site]);
 }
 
 //Delete a site through API.
@@ -125,4 +125,12 @@ window.addEventListener("load", async function() {
         btn.addEventListener('click', deleteSite);
     }
     await getImages();
+    var socket = io();
+    socket.on("Image Ready", async function(res){
+        console.log(`Receievd:`);
+        console.log(res);
+        if(waiting.includes(res.site.site_name)){
+            await loadImages([res.site]);
+        }
+    });
 });
