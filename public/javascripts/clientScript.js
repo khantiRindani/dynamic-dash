@@ -1,6 +1,9 @@
-let waiting = [];
+let waiting_sites = [];
+let present_sites = [];
 //Load individual card for a site
 function loadCard({site_name,url}) {
+
+    present_sites.push(site_name);
     let containers = document.querySelectorAll('.img_field');
     let root = containers[containers.length - 1];
 
@@ -41,13 +44,20 @@ function loadCard({site_name,url}) {
 
     root.appendChild(card);
 }
-
+function changeCard({site_name,url}){
+    let cards = document.querySelectorAll('.card');
+    for(card of cards){
+        if(card.querySelector('h2').innerHTML === site_name){
+            field.src = `images/${site_name}.png?dev=${Math.random()*100}`;
+        }
+    }
+}
 //Get Site-Images through API.
 async function getImages() {
     const response = await fetch("/getImages");
     sites = await response.json();
 
-    await loadImages(sites);
+    loadImages(sites);
 }
 
 //Load the images.
@@ -66,6 +76,7 @@ function loadImages(sitesArray) {
 async function addSite(event) {
     let siteElement = document.querySelector('#site')
     let urlElement = document.querySelector('#url');
+    waiting_sites.push(siteElement.value);
     const response = await fetch("/addSite", {
         method: 'POST',
         headers: {
@@ -77,7 +88,6 @@ async function addSite(event) {
         })
     });
     await response;
-    waiting.push(siteElement.value);
     siteElement.value = "";
     urlElement.value = "";
 }
@@ -126,11 +136,13 @@ window.addEventListener("load", async function() {
     }
     await getImages();
     var socket = io();
-    socket.on("Image Ready", async function(res){
-        console.log(`Receievd:`);
-        console.log(res);
-        if(waiting.includes(res.site.site_name)){
-            await loadImages([res.site]);
+    socket.on("Image Ready", function(res){
+        if(waiting_sites.includes(res.site.site_name)){
+            console.log("condition checked");
+            loadImages([res.site]);
+            waiting_sites.splice(waiting_sites.indexOf(res.site.site_name),1);
+        }else if(present_sites.includes(res.site.site_name)){
+            changeCard(res.site);
         }
     });
 });
