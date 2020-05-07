@@ -27,7 +27,16 @@ router.get('/categories', function(req, res, next) {
 
 //Request for getting new images (First time load or Addition of a new site)
 router.get('/getImages', function(req, res, next) {
-    const sites = req.cookies.sites;
+    let mobile = req.query.mobile;
+    res.cookie('mobile',mobile);
+    let sites = req.cookies.sites;
+    console.log(mobile);
+    if(mobile){
+        for(site of sites){
+            console.log("mobile true");
+            site.site_name = site.site_name + '_mobile';
+        }
+    }
     sites.forEach((site, index, array) => {
         controller.captureImage(site);
         io.to(req.cookies.io).emit('Image Ready',{'site': site});

@@ -26,12 +26,12 @@ function loadCard({site_name,url}) {
     card.appendChild(a);
 
     let field = document.createElement('img');
-    field.src = `images/${site_name}.png`;
+    field.src = `images/${site_name}.jpeg`;
     field.alt = site.site_name;
     a.appendChild(field);
 
     let h2 = document.createElement('h2');
-    h2.innerHTML = `${site_name}`;
+    h2.innerHTML = `${site_name.slice(0,-7)}`;
     card.appendChild(h2);
 
     let i = document.createElement('i');
@@ -48,13 +48,18 @@ function changeCard({site_name,url}){
     let cards = document.querySelectorAll('.card');
     for(card of cards){
         if(card.querySelector('h2').innerHTML === site_name){
-            field.src = `images/${site_name}.png?dev=${Math.random()*100}`;
+            field.src = `images/${site_name}.jpeg?dev=${Math.random()*100}`;
         }
     }
 }
 //Get Site-Images through API.
 async function getImages() {
-    const response = await fetch("/getImages");
+    let mobile = false;
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
+    // Take the user to a different screen here.
+        mobile = true;
+    }
+    const response = await fetch(`/getImages?mobile=${mobile}`);
     sites = await response.json();
 
     loadImages(sites);
