@@ -16,7 +16,7 @@ async function captureImage(site){
         return;
     }
     try{
-        console.log(`capturing image: ${site.url}`);
+        console.log(`capturing image: ${site.site_name}`);
         await takePicture([site])
 //        pushData(site);
         dashCash.set(site.site_name,site);

@@ -140,20 +140,40 @@ a {
         text-align: center;
     }
 }
-@media (max-width:700px) {
+/* @media (max-width:700px) {
     .card{
-        width: 90vw;
+        height: auto;
+        width: min-content;
     }
     .card:not(:first-of-type){
-        margin-left: -30vw;
+        margin-left: -10vw;
     }
 
     .card:hover~.card{
-        transform: translateX(30vw);
+        transform: translateX(10vw);
         box-shadow: 1rem 0 3rem rgba(0, 0, 0, 0.8);
     }
     img {
-        width: 90vw;
+        max-height: 30vh;
+        width: 50vw;
+    }
+} */
+
+@media (max-width:700px) {
+    .card{
         height: auto;
+        width: min-content;
+    }
+    .card:not(:first-of-type){
+        margin-left: -10vw;
+    }
+
+    .card:hover~.card{
+        transform: translateX(10vw);
+        box-shadow: 1rem 0 3rem rgba(0, 0, 0, 0.8);
+    }
+    img {
+        max-height: 30vh;
+        width: 80vw;
     }
 }

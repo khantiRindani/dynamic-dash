@@ -27,11 +27,13 @@ router.get('/categories', function(req, res, next) {
 
 //Request for getting new images (First time load or Addition of a new site)
 router.get('/getImages', function(req, res, next) {
-    const sites = req.cookies.sites;
+
+    let sites = req.cookies.sites;
     sites.forEach((site, index, array) => {
         controller.captureImage(site);
         io.to(req.cookies.io).emit('Image Ready',{'site': site});
     });
+    res.cookie('sites',sites,{expires:farFuture});
     res.json(sites);
 });
 
@@ -49,18 +51,20 @@ router.get('/getImagesCat', function(req, res, next) {
 router.post('/addSite*', function(req,res){
     const sitesCat = req.cookies.sitesCat;
     const sites = req.cookies.sites;
+
+    let name = req.body.site;
     const newSiteCap = {
-        "site_name": req.body.site,
+        "site_name": name,
         "url": req.body.url
     };
     const cat = (req.body.cat?req.body.cat:'general');
+
     const newSite = {
-        "site_name": req.body.site,
+        "site_name": name,
         "url": req.body.url,
         "cat": 'general'
     };
-    controller.captureImage(newSiteCap);
-    io.to(req.cookies.io).emit('Image Ready',{'site': newSiteCap});
+    controller.captureImage(newSiteCap).then(()=>{io.to(req.cookies.io).emit('Image Ready',{'site': newSiteCap});});
     sitesCat.push(newSite);
     sites.push(newSiteCap);
     res.cookie('sitesCat', sitesCat, {expires: farFuture});
