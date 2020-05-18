@@ -27,8 +27,8 @@ router.get('/categories', function(req, res, next) {
 
 //Request for getting new images (First time load or Addition of a new site)
 router.get('/getImages', function(req, res, next) {
-
     let sites = req.cookies.sites;
+
     sites.forEach((site, index, array) => {
         controller.captureImage(site);
         io.to(req.cookies.io).emit('Image Ready',{'site': site});

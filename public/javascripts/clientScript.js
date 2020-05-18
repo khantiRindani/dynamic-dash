@@ -55,6 +55,7 @@ function changeCard({site_name,url}){
 }
 //Get Site-Images through API.
 async function getImages() {
+
     const response = await fetch(`/getImages`);
     sites = await response.json();
 
