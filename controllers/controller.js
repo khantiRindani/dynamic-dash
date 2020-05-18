@@ -6,20 +6,19 @@ const takePicture = require('../utils/backgroundPuppet');
 const fs = require('fs');
 const farFuture = new Date(new Date().getTime() + (1000*60*60*24*365*10)); // ~10y
 
-console.log(typeof(io));
 function pushData(site){
-    io.emit('Image Ready',{'site': site});
+
 }
 //Capture image only if not cached
 async function captureImage(site){
     if(dashCash.has(site.site_name)){
-        pushData(site);
+//        pushData(site);
         return;
     }
     try{
         console.log(`capturing image: ${site.url}`);
         await takePicture([site])
-        pushData(site);
+//        pushData(site);
         dashCash.set(site.site_name,site);
     }catch(e){
         console.log('Error in puppet',e);
@@ -46,9 +45,10 @@ exports.loadOrRetrieveCookies = function(req,res){
 //Setup cache
 const ttl = 60*10; //10 minutes
 const dashCash = new NodeCache({
-    stdTTL: ttl
+    stdTTL: ttl,
+    checkperiod: 100
 });
-dashCash.on("expired", function(key, value) {
+dashCash.on("del", function(key, value) {
     try {
         console.log("Expired: cache updated");
         captureImage(value);

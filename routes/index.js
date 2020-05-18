@@ -30,6 +30,7 @@ router.get('/getImages', function(req, res, next) {
     const sites = req.cookies.sites;
     sites.forEach((site, index, array) => {
         controller.captureImage(site);
+        io.to(req.cookies.io).emit('Image Ready',{'site': site});
     });
     res.json(sites);
 });
@@ -39,6 +40,7 @@ router.get('/getImagesCat', function(req, res, next) {
     const sitesCat = req.cookies.sitesCat;
     sitesCat.forEach((site, index, array) => {
         controller.captureImage(site);
+        io.to(req.cookies.io).emit('Image Ready',{'site': site});
     });
     res.json(sitesCat);
 });
@@ -58,6 +60,7 @@ router.post('/addSite*', function(req,res){
         "cat": 'general'
     };
     controller.captureImage(newSiteCap);
+    io.to(req.cookies.io).emit('Image Ready',{'site': newSiteCap});
     sitesCat.push(newSite);
     sites.push(newSiteCap);
     res.cookie('sitesCat', sitesCat, {expires: farFuture});
