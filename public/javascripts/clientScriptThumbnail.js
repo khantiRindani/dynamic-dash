@@ -1,7 +1,7 @@
+let waiting_sites = [];
 //Load individual card for a site
 function loadCard({site_name,url}) {
-    let containers = document.querySelectorAll('.img_field');
-    let root = containers[containers.length - 1];
+    let root = document.querySelector('.img_field');
 
     let div = document.createElement('div');
     div.classList.add("card");
@@ -11,7 +11,7 @@ function loadCard({site_name,url}) {
     div.appendChild(a);
 
     let field = document.createElement('img');
-    field.src = `images/${site_name}.png`;
+    field.src = `images/${site_name}.jpeg?dev=${Math.random()*100}`;
     field.alt = site.site_name;
     a.appendChild(field);
 
@@ -29,7 +29,14 @@ function loadCard({site_name,url}) {
 
     root.appendChild(div);
 }
-
+function changeCard({site_name,url}){
+    let cards = document.querySelectorAll('.card');
+    for(card of cards){
+        if(card.querySelector('h2').innerHTML === site_name){
+            field.src = `images/${site_name}.jpeg?dev=${Math.random()*100}`;
+        }
+    }
+}
 //Get Site-Images through API.
 async function getImages() {
     const response = await fetch("/getImages");
@@ -54,6 +61,7 @@ function loadImages(sitesArray) {
 async function addSite(event) {
     let siteElement = document.querySelector('#site')
     let urlElement = document.querySelector('#url');
+    waiting_sites.push(siteElement.value);
     const response = await fetch("/addSite", {
         method: 'POST',
         headers: {
@@ -102,4 +110,14 @@ window.addEventListener("load", function() {
         btn.addEventListener('click', deleteSite);
     }
     getImages();
+    var socket = io();
+    socket.on("Image Ready", function(res){
+        if(waiting_sites.includes(res.site.site_name)){
+            console.log("condition checked");
+            loadImages([res.site]);
+            waiting_sites.splice(waiting_sites.indexOf(res.site.site_name),1);
+        }else if(!waiting_sites.includes(res.site.site_name)){
+            changeCard(res.site);
+        }
+    });
 });

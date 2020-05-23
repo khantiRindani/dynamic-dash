@@ -1,5 +1,7 @@
+let waiting_sites = [];
 //Load individual card for a site
 function loadCard({site_name,url,cat}) {
+
     let containers = document.querySelectorAll('.img-area');
 
     flag = false;
@@ -32,7 +34,7 @@ function loadCard({site_name,url,cat}) {
     div.appendChild(a);
 
     let field = document.createElement('img');
-    field.src = `images/${site_name}.png`;
+    field.src = `images/${site_name}.jpeg?dev=${Math.random()*100}`;
     field.alt = site_name;
     a.appendChild(field);
 
@@ -50,7 +52,14 @@ function loadCard({site_name,url,cat}) {
 
     root.appendChild(div);
 }
-
+function changeCard({site_name,url}){
+    let cards = document.querySelectorAll('.card');
+    for(card of cards){
+        if(card.querySelector('h2').innerHTML === site_name){
+            field.src = `images/${site_name}.jpeg?dev=${Math.random()*100}`;
+        }
+    }
+}
 //Get Site-Images through API.
 async function getImages() {
     const response = await fetch("/getImagesCat");
@@ -138,6 +147,7 @@ function showAddSiteArea(event) {
 async function addSite(event) {
     let siteElement = document.querySelector('#site')
     let urlElement = document.querySelector('#url');
+    waiting_sites.push(siteElement.value);
     const response = await fetch("/addSite", {
         method: 'POST',
         headers: {
@@ -198,4 +208,14 @@ window.addEventListener("load", function() {
         await addSite(event);
     });
     getImages();
+    var socket = io();
+    socket.on("Image Ready", function(res){
+        if(waiting_sites.includes(res.site.site_name)){
+            console.log("condition checked");
+            loadImages([res.site]);
+            waiting_sites.splice(waiting_sites.indexOf(res.site.site_name),1);
+        }else if(!waiting_sites.includes(res.site.site_name)){
+            changeCard(res.site);
+        }
+    });
 });

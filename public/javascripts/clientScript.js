@@ -1,9 +1,7 @@
 let waiting_sites = [];
-let present_sites = [];
 //Load individual card for a site
 function loadCard({site_name,url}) {
 
-    present_sites.push(site_name);
     let containers = document.querySelectorAll('.img_field');
     let root = containers[containers.length - 1];
 
@@ -12,7 +10,7 @@ function loadCard({site_name,url}) {
         let newRoot = document.createElement('div');
         newRoot.classList.add('img_field');
         newRoot.classList.add('scrolling-wrapper');
-        root.parentNode.append(newRoot);
+        root.parentNode.appendChild(newRoot);
         root = newRoot;
     }
     let card = document.createElement('div');
@@ -26,8 +24,8 @@ function loadCard({site_name,url}) {
     card.appendChild(a);
 
     let field = document.createElement('img');
-    field.src = `images/${site_name}.jpeg`;
-    field.alt = site.site_name;
+    field.src = `images/${site_name}.jpeg?dev=${Math.random()*100}`;
+    field.alt = site_name;
     a.appendChild(field);
 
     let h2 = document.createElement('h2');
@@ -45,20 +43,19 @@ function loadCard({site_name,url}) {
 
     root.appendChild(card);
 }
-function changeCard({site_name,url}){
+function changeCard(site_name){
     let cards = document.querySelectorAll('.card');
     for(card of cards){
         if(card.querySelector('h2').innerHTML === site_name){
-            field.src = `images/${site_name}.jpeg?dev=${Math.random()*100}`;
+            card.querySelector('img').src = `images/${site_name}.jpeg?dev=${Math.random()*100}`;
         }
     }
 }
+
 //Get Site-Images through API.
 async function getImages() {
-
     const response = await fetch(`/getImages`);
     sites = await response.json();
-
     loadImages(sites);
 }
 
@@ -137,14 +134,21 @@ window.addEventListener("load", async function() {
         btn.addEventListener('click', deleteSite);
     }
     await getImages();
-    var socket = io();
-    socket.on("Image Ready", function(res){
+
+    const socket = io();
+    socket.on("connect", async function(){
+         await fetch(`/captureImages?dev=${Math.random()*100}`);
+    });
+    socket.on("Image", function(res){
         if(waiting_sites.includes(res.site.site_name)){
-            console.log("condition checked");
+            //console.log("condition checked");
             loadImages([res.site]);
             waiting_sites.splice(waiting_sites.indexOf(res.site.site_name),1);
-        }else if(present_sites.includes(res.site.site_name)){
-            changeCard(res.site);
+        }
+        else{
+            //console.log("change received");
+            //console.log(res.site);
+            changeCard(res.site.site_name);
         }
     });
 });

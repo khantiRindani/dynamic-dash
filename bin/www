@@ -20,9 +20,12 @@ app.set('port', port);
 
 var server = http.createServer(app);
 var io = require('socket.io')(server);
-io.on('connection', function(socket){
-  console.log('A new WebSocket connection has been established');
-});
+// io.attach(server,{
+//     allowUpgrades: false,
+//     cookie: 'socket'
+// });
+const controller = require('../controllers/controller');
+controller.io_startup(io);
 global.io = io;
 /**
  * Listen on provided port, on all network interfaces.
@@ -79,7 +82,13 @@ function onError(error) {
       throw error;
   }
 }
-
+process.on('SIGTERM', () => {
+  console.info('SIGTERM signal received.');
+  console.log('Closing http server.');
+  server.close(() => {
+    console.log('Http server closed.');
+  });
+});
 /**
  * Event listener for HTTP server "listening" event.
  */

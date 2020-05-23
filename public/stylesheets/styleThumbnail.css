@@ -69,7 +69,7 @@ body {
     position: relative;
 }
 
-.scrolling_wrapper{
+.scrolling-wrapper{
     display: flex;
     flex-wrap: wrap;
     padding: 3rem;
