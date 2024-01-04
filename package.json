@@ -1,17 +1,18 @@
 {
-  "name": "express-dashboard",
+  "name": "dynamic-dash",
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www"
+    "start": "nodemon ./bin/www",
+    "build": "npm install"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
-    "express": "~4.16.1",
+    "express": "^4.18.2",
     "node-cache": "^5.1.0",
     "nodemon": "^2.0.3",
     "pug": "3.0.1",
-    "puppeteer": "^3.0.0",
-    "socket.io": "^2.4.0"
+    "puppeteer": "^21.6.0",
+    "socket.io": "^4.7.3"
   }
 }

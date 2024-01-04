@@ -27,30 +27,32 @@ body {
     flex: auto;
     text-align: center;
 }
-.header input{
+form input{
     min-width: 100px;
     margin-bottom: 5px;
     width: fit-content;
     border-radius: 0;
     height: 30px;
 }
-.header button {
+
+form button {
     padding: 5px;
     background: white;
     box-shadow: -1rem 1rem 1rem rgba(0,0,0,0.3);
+    border-radius: 5px;
 }
 
-.header button:hover,
-.header button:focus {
+form button:hover,
+form button:focus {
     background: lightgrey;
 }
 
-.header button:focus {
+form button:focus {
     outline: 1px solid #fff;
     outline-offset: -4px;
 }
 
-.header button:active {
+form button:active {
     transform: scale(0.99);
 }
 

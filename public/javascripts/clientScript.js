@@ -21,6 +21,7 @@ function loadCard({site_name,url}) {
 
     let a = document.createElement('a');
     a.href = `${url}`;
+    a.target = '_blank';
     card.appendChild(a);
 
     let field = document.createElement('img');
